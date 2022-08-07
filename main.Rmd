@@ -1,0 +1,18 @@
+---
+title: "Random Forest and Gradient Boosting in R"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Übersicht
+### 1.1 Übersicht über Random Forest
+### 1.2 Übersicht über Gradient Boosting
+
+
+## 2. Implementierung in R
+
+
+## 3. Vor- und Nachteile
