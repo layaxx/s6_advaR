@@ -1,0 +1,122 @@
+---
+title: 'Random Forest vs. Gradient Boosting'
+author: "Jonathan Loew, Yannick Lang"
+date: 
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+    math: katex
+    number_sections: yes
+    toc: yes
+    toc_depth: 2
+    fig_caption: yes
+    fig_width: 7
+    fig_height: 7
+    keep_md: yes
+subtitle: 'verschiedene Random Forest / Gradient Boosting packages in R'
+---
+
+```{r setup, include=FALSE, purl=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Dataset
+```{r}
+library(pacman)
+
+data <- MASS::Boston # data set to be used
+row <- 14 # row of the data set that will be predicted
+
+test_ids <- sample(nrow(data), 10)
+
+training_data_x <- data[-test_ids, -row]
+training_data_y <- data[-test_ids, row]
+
+test_data_x <- data[test_ids, -row]
+test_data_y <- data[test_ids, row]
+```
+
+
+# packages
+## Rforestry
+Supports both Random Forests and Gradient Boosting
+
+```{r}
+p_load(Rforestry)
+```
+
+Random Forest: uses `forestry` function
+
+```{r}
+rf <- forestry(x = training_data_x, y = training_data_y)
+```
+
+Gradient Boosting: uses `multiLayerForestry` function
+```{r}
+bg <- multilayerForestry(x = training_data_x, y = training_data_y)
+```
+
+Predictions:
+```{r}
+predicted_y_rf <- predict(rf, test_data_x)
+predicted_y_bg <- predict(bg, test_data_x)
+
+plot(
+  1:length(test_data_y),
+  test_data_y,
+  col = "black",
+  main = "RF and GB with Rforestry",
+  xlab = "data points", ylab = "y values"
+)
+points(1:length(test_data_y), predicted_y_rf, col = "red")
+points(1:length(test_data_y), predicted_y_bg, col = "purple")
+legend(
+  "topright",
+  legend = c("Actual values", "predicted by Random Forest", "predicted by Gradient Boosting"),
+  pch = 1,
+  col = c("black", "red", "purple")
+)
+
+mean(test_data_y - predicted_y_rf)
+sd(test_data_y - predicted_y_rf)
+mean(test_data_y - predicted_y_bg)
+sd(test_data_y - predicted_y_bg)
+```
+## gbm
+Gradient Boosting
+
+```{r}
+
+# if(!is.element("gbm" , installed.packages()[,1]))
+#  install.packages("gbm")
+
+p_load(gbm)
+```
+
+Gradient Boosting: uses `multiLayerForestry` function
+```{r}
+gbm <- gbm(medv ~ ., data = data[-test_ids, ])
+```
+Predictions:
+```{r}
+predicted_y_gbm <- predict(gbm, test_data_x)
+
+plot(1:length(test_data_y),
+  test_data_y,
+  col = "black",
+  main = "Gradient Boosting with gbm",
+  xlab = "data points", ylab = "y values"
+)
+points(1:length(test_data_y), predicted_y_gbm, col = "purple")
+legend(
+  "topright",
+  legend = c("Actual values", "predicted by Gradient Boosting"),
+  pch = 1,
+  col = c("black", "purple")
+)
+
+mean(test_data_y - predicted_y_gbm)
+sd(test_data_y - predicted_y_gbm)
+```
+ 
