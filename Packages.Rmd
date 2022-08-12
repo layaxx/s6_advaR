@@ -120,3 +120,38 @@ mean(test_data_y - predicted_y_gbm)
 sd(test_data_y - predicted_y_gbm)
 ```
  
+## caret
+via https://www.r-bloggers.com/2018/11/machine-learning-basics-gradient-boosting-xgboost/
+```{r}
+p_load(caret)
+# Train model
+model_gbm <- caret::train(medv ~ .,
+  data = data[-test_ids, ],
+  method = "gbm",
+  # preProcess = c("scale", "center"),
+  verbose = 0
+)
+model_gbm
+```
+
+Predictions:
+```{r}
+predicted_y_model_gbm <- predict(model_gbm, test_data_x)
+
+plot(1:length(test_data_y),
+  test_data_y,
+  col = "black",
+  main = "Gradient Boosting with caret (gbm)",
+  xlab = "data points", ylab = "y values"
+)
+points(1:length(test_data_y), predicted_y_model_gbm, col = "purple")
+legend(
+  "topright",
+  legend = c("Actual values", "predicted by Gradient Boosting"),
+  pch = 1,
+  col = c("black", "purple")
+)
+
+mean(test_data_y - predicted_y_model_gbm)
+sd(test_data_y - predicted_y_model_gbm)
+```
