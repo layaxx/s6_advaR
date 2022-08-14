@@ -25,16 +25,59 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(pacman)
 
+set.seed(42)
+
 data <- MASS::Boston # data set to be used
 row <- 14 # row of the data set that will be predicted
 
 test_ids <- sample(nrow(data), 10)
 
+training_data <- data[-test_ids, ]
 training_data_x <- data[-test_ids, -row]
 training_data_y <- data[-test_ids, row]
 
 test_data_x <- data[test_ids, -row]
 test_data_y <- data[test_ids, row]
+
+formula <- formula(paste(names(data)[row], "~ ."))
+```
+
+# Benchmark
+Die Benchmark function erwartet els Eingabe eine Funktion, die das Model generiert, eine optionale Zahl, die der Anzahl der Wiederholungen enspricht und einen Optionalen Titel für das generierte Diagram.
+Zurückgegeben werden Standardabweichung/Durchschnitt der Differenz zwischen echten Werten des Testdatensatzes und den geschätzten Werten des (letzten) Models und die durchschnittliche Laufzeit der Modelgenerierung. Ausserdem werden die echten Werten des Testdatensatzes und den geschätzten Werten des (letzten) Models geplottet.
+```{r}
+benchmark <- function(createModel, times = 1, title = "Benchmark") {
+  start_time <- Sys.time()
+  for (idx in 1:times) {
+    model <- createModel()
+  }
+  end_time <- Sys.time()
+
+  predicted_values <- predict(model, test_data_x)
+
+  plot(1:length(test_data_y),
+    test_data_y,
+    col = "black",
+    main = title,
+    xlab = "data points", ylab = "y values"
+  )
+  points(1:length(test_data_y), predicted_values, col = "purple")
+  legend(
+    "topright",
+    legend = c("Actual values", "Predicted values"),
+    pch = 1,
+    col = c("black", "purple")
+  )
+
+
+  result <- list(
+    sd = sd(test_data_y - predicted_values),
+    mean = mean(test_data_y - predicted_values),
+    average_duration = (end_time - start_time) / times
+  )
+
+  result
+}
 ```
 
 
@@ -49,109 +92,46 @@ p_load(Rforestry)
 Random Forest: uses `forestry` function
 
 ```{r}
-rf <- forestry(x = training_data_x, y = training_data_y)
+benchmark(function() {
+  forestry(x = training_data_x, y = training_data_y)
+}, 10, "Benchmark with Rforestry forestry")
 ```
 
 Gradient Boosting: uses `multiLayerForestry` function
 ```{r}
-bg <- multilayerForestry(x = training_data_x, y = training_data_y)
+benchmark(function() {
+  multilayerForestry(x = training_data_x, y = training_data_y)
+}, 10, "Benchmark with Rforestry multilayerForestry")
 ```
 
-Predictions:
-```{r}
-predicted_y_rf <- predict(rf, test_data_x)
-predicted_y_bg <- predict(bg, test_data_x)
-
-plot(
-  1:length(test_data_y),
-  test_data_y,
-  col = "black",
-  main = "RF and GB with Rforestry",
-  xlab = "data points", ylab = "y values"
-)
-points(1:length(test_data_y), predicted_y_rf, col = "red")
-points(1:length(test_data_y), predicted_y_bg, col = "purple")
-legend(
-  "topright",
-  legend = c("Actual values", "predicted by Random Forest", "predicted by Gradient Boosting"),
-  pch = 1,
-  col = c("black", "red", "purple")
-)
-
-mean(test_data_y - predicted_y_rf)
-sd(test_data_y - predicted_y_rf)
-mean(test_data_y - predicted_y_bg)
-sd(test_data_y - predicted_y_bg)
-```
 ## gbm
 Gradient Boosting
 
 ```{r}
 
-# if(!is.element("gbm" , installed.packages()[,1]))
-#  install.packages("gbm")
-
 p_load(gbm)
 ```
 
-Gradient Boosting: uses `multiLayerForestry` function
+Benchmark:
 ```{r}
-gbm <- gbm(medv ~ ., data = data[-test_ids, ])
-```
-Predictions:
-```{r}
-predicted_y_gbm <- predict(gbm, test_data_x)
-
-plot(1:length(test_data_y),
-  test_data_y,
-  col = "black",
-  main = "Gradient Boosting with gbm",
-  xlab = "data points", ylab = "y values"
-)
-points(1:length(test_data_y), predicted_y_gbm, col = "purple")
-legend(
-  "topright",
-  legend = c("Actual values", "predicted by Gradient Boosting"),
-  pch = 1,
-  col = c("black", "purple")
-)
-
-mean(test_data_y - predicted_y_gbm)
-sd(test_data_y - predicted_y_gbm)
+benchmark(function() {
+  gbm(formula,
+    data = training_data
+  )
+}, 10, "Benchmark with gbm")
 ```
  
 ## caret
 via https://www.r-bloggers.com/2018/11/machine-learning-basics-gradient-boosting-xgboost/
-```{r}
-p_load(caret)
-# Train model
-model_gbm <- caret::train(medv ~ .,
-  data = data[-test_ids, ],
-  method = "gbm",
-  # preProcess = c("scale", "center"),
-  verbose = 0
-)
-model_gbm
-```
 
 Predictions:
 ```{r}
-predicted_y_model_gbm <- predict(model_gbm, test_data_x)
-
-plot(1:length(test_data_y),
-  test_data_y,
-  col = "black",
-  main = "Gradient Boosting with caret (gbm)",
-  xlab = "data points", ylab = "y values"
-)
-points(1:length(test_data_y), predicted_y_model_gbm, col = "purple")
-legend(
-  "topright",
-  legend = c("Actual values", "predicted by Gradient Boosting"),
-  pch = 1,
-  col = c("black", "purple")
-)
-
-mean(test_data_y - predicted_y_model_gbm)
-sd(test_data_y - predicted_y_model_gbm)
+benchmark(function() {
+  caret::train(formula,
+    data = training_data,
+    method = "gbm",
+    # preProcess = c("scale", "center"),
+    verbose = 0
+  )
+}, 10, "Benchmark with caret")
 ```
