@@ -1,18 +1,38 @@
 ---
 title: "Random Forest and Gradient Boosting in R"
-output: html_document
+author: "Jonathan Loew, Yannick Lang"
+date: 
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+    math: katex
+    number_sections: yes
+    toc: yes
+    toc_depth: 2
+    fig_caption: yes
+    fig_width: 7
+    fig_height: 7
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## 1. Übersicht
-### 1.1 Übersicht über Random Forest
-### 1.2 Übersicht über Gradient Boosting
+# Übersicht
+## Übersicht über Random Forest
+Ein Random Forest ist grundlegend eine Ansammlung an unabhängigen Entscheidungsbäumen. Jeder Entscheidungsbaum besteht aus mindestens einem Knoten. Der Baum wird beginnend beim Wurzelknoten durchlaufen, hierbei wird an jedem Knoten eine Entscheidung getroffen. Diese bestimmt, welcher Weg von hier aus genommen wird. Sobald ein Blatt des Baums erreicht wird, endet der Durchlauf.
+```{r echo=FALSE}
+# Entscheidungsbaumerklärung evtl. woanders hin?
+```
+Ein einzelner Entscheidungsbaum kann allerdings vielen Fehlern erliegen. Dazu gehören zum Beispiel Überanpassung sowie Verzerrungs- und Varianzfehler. Um diese Probleme zu verhindern werden beim Random Forest mehrere Entscheidungsbäume trainiert. Allerdings wird jeder dieser Bäume wird nicht mit dem gesammten Datenset trainiert. Statdessen werden für jeden Baum zufällig Attribute und Datenreihen aus dem Datenset ausgewählt. Hierdurch werden viele verschiedene Entscheidungsbäume erstellt. Natürlich werden die einzelnen Bäume dadurch verschiedene Ergebnisse liefern, diese müssen zuletzt noch aggregiert werden.
+
+## Übersicht über Gradient Boosting
+Gardient Boosting benutzt grundlegend auch Entscheidungsbäume, allerdings auf einer anderen Art. Wo beim Random Forest alle Bäume unabhängig voneinander waren, bauen die Entscheidungsbäume hier aufeinander auf. Es wird zuerst ein Entscheidungsbaum auf das gesamte Datenset trainiert. Wenn man das Datenset mit diesem Baum schätzt, kann man die Abweichung als die Differenz des eigentlichen Wertes und des durch den Baum geschätzten Wertes ausrechnen. Auf diese Abweichung wird ein weiterer Entscheidungsbaum trainiert, hierfür wird das selbe Datenset genommen, nur dass das gewollte Ergebnis nun die Abweichung ist. Wenn nun die Ergebnisse aller Bäume zusammenaddiert werden, bekommt man ein genaueres Ergebnis, verglichen mit nur einem Entscheidungsbaum. Nun kann natürlich auf die gemeinsame Abweichung, der beiden Bäume, wieder ein neuer Entscheidungsbaum trainiert werden. Auf diese Weise können beliebig viele Bäume erstellt werden.
+
+# Implementierung in R
 
 
-## 2. Implementierung in R
+# Vor- und Nachteile
 
-
-## 3. Vor- und Nachteile
