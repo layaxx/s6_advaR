@@ -29,54 +29,70 @@ set.seed(42)
 
 data <- MASS::Boston # data set to be used
 column <- 14 # column of the data set that will be predicted
-
-test_ids <- sample(nrow(data), 10)
-
-training_data <- data[-test_ids, ]
-training_data_x <- data[-test_ids, -column]
-training_data_y <- data[-test_ids, column]
-
-test_data_x <- data[test_ids, -column]
-test_data_y <- data[test_ids, column]
-
 formula <- formula(paste(names(data)[column], "~ ."))
 ```
 
 # Benchmark
-Die Benchmark function erwartet els Eingabe eine Funktion, die das Model generiert, eine optionale Zahl, die der Anzahl der Wiederholungen enspricht und einen Optionalen Titel für das generierte Diagram.
-Zurückgegeben werden Standardabweichung/Durchschnitt der Differenz zwischen echten Werten des Testdatensatzes und den geschätzten Werten des (letzten) Models und die durchschnittliche Laufzeit der Modelgenerierung. Ausserdem werden die echten Werten des Testdatensatzes und den geschätzten Werten des (letzten) Models geplottet.
+Die Benchmark function erwartet els Eingabe eine Funktion, die das Model generiert und eine optionale Zahl, die der Anzahl der Wiederholungen enspricht.
+
+Das Model wird `times` Male mit je unterschiedlichen Daten geschätzt und anhand der Testdaten auf Güte überprüft. Zurückgegeben werden durchschnittliche Standardabweichung/Durchschnitt der Differenz zwischen echten Werten des Testdatensatzes und den geschätzten Werten des Models und die durchschnittliche Laufzeit der Modelgenerierung.
 ```{r}
-benchmark <- function(createModel, times = 1, title = "Benchmark") {
+# auxiliary function which splits a dataset into training and test data
+split_into_training_and_test <- function(dataset) {
+  # 20% of data will be test data
+  test_ids <- sample(nrow(data), nrow(data) * 0.2)
+
+  list(test = data[test_ids, ], training = data[-test_ids, ])
+}
+
+get_x_values <- function(dataset) {
+  dataset[, -column]
+}
+get_y_values <- function(dataset) {
+  dataset[, column]
+}
+
+run_single_benchmark <- function(createModel) {
+  datasets <- split_into_training_and_test(data)
+
+  # calculates the model and times it
   start_time <- Sys.time()
-  for (idx in 1:times) {
-    model <- createModel()
-  }
+  model <- createModel(datasets$training)
   end_time <- Sys.time()
 
-  predicted_values <- predict(model, test_data_x)
+  # calculates predicted values from model
+  predicted_values <- predict(model, get_x_values(datasets$test))
+  actual_values <- get_y_values(datasets$test)
 
-  plot(1:length(test_data_y),
-    test_data_y,
-    col = "black",
-    main = title,
-    xlab = "data points", ylab = "y values"
+  # compares predicted with actual values and returns results
+  list(
+    sd = sd(actual_values - predicted_values),
+    mean = mean(actual_values - predicted_values),
+    duration = end_time - start_time
   )
-  points(1:length(test_data_y), predicted_values, col = "purple")
-  legend(
-    "topright",
-    legend = c("Actual values", "Predicted values"),
-    pch = 1,
-    col = c("black", "purple")
+}
+
+
+benchmark <- function(createModel, times = 1) {
+  sums <- list(sd = 0, mean = 0, duration = 0)
+  for (idx in 1:times) {
+    # runs the actual benchmark `times` times
+    result <- run_single_benchmark(createModel)
+
+    # adds up the results
+    sums$sd <- sums$sd + result$sd
+    sums$mean <- sums$mean + result$mean
+    sums$duration <- sums$duration + result$duration
+  }
+
+  # calculates the average over every run and returns the result
+  averages <- list(
+    sd = sums$sd / times,
+    mean = sums$mean / times,
+    duration = sums$duration / times
   )
 
-
-  result <- list(
-    sd = sd(test_data_y - predicted_values),
-    mean = mean(test_data_y - predicted_values),
-    average_duration = (end_time - start_time) / times
-  )
-
-  result
+  averages
 }
 ```
 
@@ -92,16 +108,16 @@ p_load(Rforestry)
 Random Forest: uses `forestry` function
 
 ```{r}
-benchmark(function() {
-  forestry(x = training_data_x, y = training_data_y)
-}, 10, "Benchmark with Rforestry forestry")
+benchmark(function(data) {
+  forestry(x = get_x_values(data), y = get_y_values(data))
+}, 10)
 ```
 
 Gradient Boosting: uses `multiLayerForestry` function
 ```{r}
-benchmark(function() {
-  multilayerForestry(x = training_data_x, y = training_data_y)
-}, 10, "Benchmark with Rforestry multilayerForestry")
+benchmark(function(data) {
+  multilayerForestry(x = get_x_values(data), y = get_y_values(data))
+}, 10)
 ```
 
 ## gbm
@@ -114,11 +130,11 @@ p_load(gbm)
 
 Benchmark:
 ```{r}
-benchmark(function() {
+benchmark(function(data) {
   gbm(formula,
-    data = training_data
+    data = data
   )
-}, 10, "Benchmark with gbm")
+}, 10)
 ```
  
 ## caret
@@ -126,12 +142,12 @@ via https://www.r-bloggers.com/2018/11/machine-learning-basics-gradient-boosting
 
 Predictions:
 ```{r}
-benchmark(function() {
+benchmark(function(data) {
   caret::train(formula,
-    data = training_data,
+    data = data,
     method = "gbm",
     # preProcess = c("scale", "center"),
     verbose = 0
   )
-}, 10, "Benchmark with caret")
+}, 10)
 ```
