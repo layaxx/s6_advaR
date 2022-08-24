@@ -1,5 +1,5 @@
 ---
-title: "Random Forest and Gradient Boosting in R"
+title: "Random Forest und Gradient Boosting in R"
 author: "Jonathan Loew, Yannick Lang"
 date: 
 output:
@@ -18,18 +18,23 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+# R Version: 4.0.5
 ```
+
+# Einleitung
+In der heutigen Welt ist es oft nötig eine automatische Klassifikation oder Schätzung von Daten durchzuführen. Zwei mögliche Methoden dafür sind Random Forest sowie Gradient Boosting.
+Im Rahmen dieses Papers werden diese Methoden im genaueren vorgestellt. Des weiteren zeigen wir wie diese Methoden in R implementiert werden können und welche Vor- und Nachteile beide Methoden besitzen.
 
 # Übersicht
+Sowohl Random Forest, als auch Gradient Boosting basieren grundlegend auf Entscheidungsbäumen. Jeder dieser Bäume besteht aus mindestens einem Knoten. Der Baum wird beginnend beim Wurzelknoten durchlaufen, wobei an jedem Knoten eine Entscheidung getroffen wird. Diese bestimmt, welcher Weg von hier aus genommen wird. Sobald ein Blatt des Baums erreicht wird, endet der Durchlauf. Um einen Entscheidungsbaum zu trainieren, gibt es verschiedene Methoden, diese werden hier allerdings nicht weiter beleuchtet. Der Lernprozess kann aber vielen Fehlern erliegen. Dazu gehören zum Beispiel Überanpassung sowie Verzerrungs- und Varianzfehler. Um manche dieser Probleme zu verhindern, benutzen Random Forest und Gradient Boosting mehrere Entscheidungbäume. Die Methoden unterscheiden sich allerdings stark darin, wie die Bäume trainiert werden.
+
 ## Übersicht über Random Forest
-Ein Random Forest ist grundlegend eine Ansammlung an unabhängigen Entscheidungsbäumen. Jeder Entscheidungsbaum besteht aus mindestens einem Knoten. Der Baum wird beginnend beim Wurzelknoten durchlaufen, hierbei wird an jedem Knoten eine Entscheidung getroffen. Diese bestimmt, welcher Weg von hier aus genommen wird. Sobald ein Blatt des Baums erreicht wird, endet der Durchlauf.
-```{r echo=FALSE}
-# Entscheidungsbaumerklärung evtl. woanders hin?
-```
-Ein einzelner Entscheidungsbaum kann allerdings vielen Fehlern erliegen. Dazu gehören zum Beispiel Überanpassung sowie Verzerrungs- und Varianzfehler. Um diese Probleme zu verhindern werden beim Random Forest mehrere Entscheidungsbäume trainiert. Allerdings wird jeder dieser Bäume wird nicht mit dem gesammten Datenset trainiert. Statdessen werden für jeden Baum zufällig Attribute und Datenreihen aus dem Datenset ausgewählt. Hierdurch werden viele verschiedene Entscheidungsbäume erstellt. Natürlich werden die einzelnen Bäume dadurch verschiedene Ergebnisse liefern, diese müssen zuletzt noch aggregiert werden.
+Ein Random Forest besteht grundlegend aus beliebig vielen unabhängigen Entscheidungsbäumen. 
+Allerdings wird jeder dieser Bäume nicht mit dem gesamten Datensatz trainiert. Stattdessen werden für jeden Baum zufällig Attribute und Datenreihen aus dem Datenset ausgewählt. Hierdurch werden viele verschiedene Entscheidungsbäume erstellt, welche oftmals verschiedene Ergebnisse liefern. Deswegen müssen die Ergebnisse der einzelnen Bäume zuletzt noch aggregiert werden. Jeder einzelne der trainierten Entscheidungsbäume ist nicht gut darin die Daten zu klassifizieren oder zu schätzen, zusammen können die Bäume dies allerdings gut machen.
 
 ## Übersicht über Gradient Boosting
-Gardient Boosting benutzt grundlegend auch Entscheidungsbäume, allerdings auf einer anderen Art. Wo beim Random Forest alle Bäume unabhängig voneinander waren, bauen die Entscheidungsbäume hier aufeinander auf. Es wird zuerst ein Entscheidungsbaum auf das gesamte Datenset trainiert. Wenn man das Datenset mit diesem Baum schätzt, kann man die Abweichung als die Differenz des eigentlichen Wertes und des durch den Baum geschätzten Wertes ausrechnen. Auf diese Abweichung wird ein weiterer Entscheidungsbaum trainiert, hierfür wird das selbe Datenset genommen, nur dass das gewollte Ergebnis nun die Abweichung ist. Wenn nun die Ergebnisse aller Bäume zusammenaddiert werden, bekommt man ein genaueres Ergebnis, verglichen mit nur einem Entscheidungsbaum. Nun kann natürlich auf die gemeinsame Abweichung, der beiden Bäume, wieder ein neuer Entscheidungsbaum trainiert werden. Auf diese Weise können beliebig viele Bäume erstellt werden.
+Gradient Boosting benutzt seine Entscheidungsbäume auf einer anderen Art. Wo beim Random Forest alle Bäume unabhängig voneinander waren, bauen die Entscheidungsbäume hier aufeinander auf. Es wird zuerst ein Entscheidungsbaum auf das gesamte Datenset trainiert. Wenn man das Datenset mit diesem Baum schätzt, kann man die Abweichung als die Differenz des eigentlichen Wertes und des durch den Baum geschätzten Wertes ausrechnen. Auf diese Abweichung wird ein weiterer Entscheidungsbaum trainiert, hierfür wird das selbe Datenset genommen, nur dass das gewollte Ergebnis nun die Abweichung ist. Wenn nun die Ergebnisse beider Bäume zusammenaddiert werden, bekommt man ein genaueres Ergebnis, verglichen mit nur einem Entscheidungsbaum. Nun kann natürlich auf die gemeinsame Abweichung der beiden Bäume, wieder ein neuer Entscheidungsbaum trainiert werden. Auf diese Weise können beliebig viele Bäume erstellt werden.
 
 # Implementierung in R
 
