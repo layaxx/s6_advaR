@@ -174,3 +174,10 @@ benchmark(function(data) {
   )
 }, 10)
 ```
+
+# Übersicht
+package | Algorithmus
+--------|------------
+rForestry | Random Forest + Gradient Boosting
+gbm | Gradient Boosting
+caret | Random Forest, Gradient Boosting u.v.m
