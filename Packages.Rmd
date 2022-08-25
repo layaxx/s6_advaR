@@ -35,7 +35,7 @@ formula <- formula(paste(names(data)[column], "~ ."))
 # Benchmark
 Die Benchmark function erwartet els Eingabe eine Funktion, die das Model generiert und eine optionale Zahl, die der Anzahl der Wiederholungen enspricht.
 
-Das Model wird `times` Male mit je unterschiedlichen Daten geschätzt und anhand der Testdaten auf Güte überprüft. Zurückgegeben werden durchschnittliche Standardabweichung/Durchschnitt der Differenz zwischen echten Werten des Testdatensatzes und den geschätzten Werten des Models und die durchschnittliche Laufzeit der Modelgenerierung.
+Das Model wird `times` Male mit je unterschiedlichen Daten geschätzt und anhand der Testdaten auf Güte überprüft. Zurückgegeben werden durchschnittliche Standardabweichung, Differenz zwischen echten Werten des Testdatensatzes und den geschätzten Werten des Models und die durchschnittliche Laufzeit der Modelgenerierung.
 ```{r}
 # auxiliary function which splits a dataset into training and test data
 split_into_training_and_test <- function(dataset) {
@@ -68,7 +68,7 @@ run_single_benchmark <- function(createModel) {
   # compares predicted with actual values and returns results
   list(
     sd = sd(actual_values - predicted_values),
-    mean = mean(actual_values - predicted_values),
+    mean = abs(mean(actual_values - predicted_values)),
     duration = end_time - start_time
   )
 }
