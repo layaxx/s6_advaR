@@ -164,6 +164,14 @@ Standard Parameter:
 
 Tuning Paremeter hängen von der Funktion die zum Schätzen verwendet werden soll ab.
 
+Diese können allerdings automatisch getuned werden über die Parameter trControl und tuneLength.
+Für genauere Kontrolle über die erlaubten Werte kann auch tuneGrid benutzt werden, hierfür werden allerdings die Namen der Parameter gebraucht, diese können mit folgendem Code ausgegeben werden:
+```{r}
+library(caret)
+getModelInfo("rf")$rf$parameters
+getModelInfo("gbm")$gbm$parameters
+```
+
 Benchmark:
 ```{r}
 benchmark(function(data) {
