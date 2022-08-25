@@ -109,6 +109,7 @@ p_load(Rforestry)
 Random Forest: mithilfe der `forestry` Funktion:
 
 Tuning Parameter:
+
 - ntree: Anzahl der Bäume, default 500
 - maxDepth: maximale Tiefe eines Baums, default 99
 
@@ -121,6 +122,7 @@ benchmark(function(data) {
 Gradient Boosting: mithilfe der `multiLayerForestry` Funktion:
 
 Tuning Parameter:
+
 - ntree: Anzahl der Bäume, default 500
 - maxDepth: maximale Tiefe eines Baums, default 99
 - eta: Lernrate, default 0.3
@@ -134,6 +136,7 @@ benchmark(function(data) {
 Gradient Boosting
 
 Tuning Parameter:
+
 - n.trees: Anzahl der Bäume, default 100
 - interaction.depth: maximale Tiefe eines Baums, default 1
 - shrinkage: Lernrate, default 0.1
@@ -156,6 +159,7 @@ benchmark(function(data) {
 Sehr vielseitige Bibliothek, die verschiedenste Modelle schätzen kann: https://topepo.github.io/caret/available-models.html
 
 Standard Parameter:
+
 - NAs: schlägt fehl, wenn die Daten NAs enthalten, kann geändert werden
 
 Tuning Paremeter hängen von der Funktion die zum Schätzen verwendet werden soll ab.
