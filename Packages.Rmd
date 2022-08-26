@@ -115,7 +115,7 @@ p_load(Rforestry)
 
 Random Forest: mithilfe der `forestry` Funktion:
 
-Tuning Parameter:
+Tuning Parameter [@R-Rforestry]:
 
 - ntree: Anzahl der Bäume, default 500
 - maxDepth: maximale Tiefe eines Baums, default 99
@@ -128,7 +128,7 @@ benchmark(function(data) {
 
 Gradient Boosting: mithilfe der `multiLayerForestry` Funktion:
 
-Tuning Parameter:
+Tuning Parameter [@R-Rforestry]:
 
 - ntree: Anzahl der Bäume, default 500
 - maxDepth: maximale Tiefe eines Baums, default 99
@@ -142,7 +142,7 @@ benchmark(function(data) {
 ### gbm
 Gradient Boosting
 
-Tuning Parameter:
+Tuning Parameter [@R-gbm]:
 
 - n.trees: Anzahl der Bäume, default 100
 - interaction.depth: maximale Tiefe eines Baums, default 1
@@ -168,7 +168,7 @@ benchmark(function(data) {
 p_install("ggplot2", force = FALSE)
 p_load(caret)
 ```
-Sehr vielseitige Bibliothek, die verschiedenste Modelle schätzen kann: https://topepo.github.io/caret/available-models.html
+Sehr vielseitige Bibliothek, die verschiedenste Modelle schätzen kann.
 
 Standard Parameter:
 
@@ -178,13 +178,13 @@ Tuning Parameter hängen von der Funktion die zum Schätzen verwendet werden sol
 Diese werden bei caret allerdings automatisch getuned. Genauere Kontrolle darüber geben die Parameter trControl und tuneLength.
 Für genauere Kontrolle über die erlaubten Werte kann auch tuneGrid benutzt werden, hierfür werden allerdings die Namen der Parameter gebraucht, diese können wie folgt ausgegeben werden.
 
-Parameters for Random Forest:
-```{r}
+Parameter für Random Forest:
+```{r modelInfo rf}
 getModelInfo("rf")$rf$parameters
 ```
 
-Parameters for Gradient Boosting:
-```{r}
+Parameter für Gradient Boosting:
+```{r modelInfo gbm}
 getModelInfo("gbm")$gbm$parameters
 ```
 
