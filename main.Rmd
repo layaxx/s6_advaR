@@ -14,6 +14,7 @@ output:
     fig_width: 7
     fig_height: 7
     keep_md: yes
+bibliography: references.bib  
 ---
 
 ```{r setupMain, include=FALSE}
@@ -99,3 +100,8 @@ Auch hier gibt es prominente Hyperparameter, die Einfluss auf Qualität und Perf
 
 
 # Vor- und Nachteile
+
+
+@R-base
+
+# References
