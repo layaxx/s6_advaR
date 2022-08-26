@@ -1,7 +1,7 @@
 ---
 title: "Random Forest und Gradient Boosting in R"
 author: "Jonathan Loew, Yannick Lang"
-date: 
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   prettydoc::html_pretty:
     theme: cayman
