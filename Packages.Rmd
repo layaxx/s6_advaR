@@ -175,6 +175,7 @@ Tuning Paremeter hängen von der Funktion die zum Schätzen verwendet werden sol
 Diese können allerdings automatisch getuned werden über die Parameter trControl und tuneLength.
 Für genauere Kontrolle über die erlaubten Werte kann auch tuneGrid benutzt werden, hierfür werden allerdings die Namen der Parameter gebraucht, diese können mit folgendem Code ausgegeben werden:
 ```{r caret-setup}
+p_install("ggplot2")
 p_load(caret)
 getModelInfo("rf")$rf$parameters
 getModelInfo("gbm")$gbm$parameters
