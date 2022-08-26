@@ -100,8 +100,17 @@ Auch hier gibt es prominente Hyperparameter, die Einfluss auf Qualität und Perf
 
 
 # Vor- und Nachteile
+Mit den richtigen Parametern performed Gradient boosting in der Regel besser [@Ravanshad].
+Es gibt allerdings auch potentielle Nachteile: Weil die einzelnen Entscheidungsbäume beim
+Gradient Boosting anders als bei Random Forest nicht unabhängig voneinander sind, können 
+sie nicht parallel trainiert werden, was Gradient Boosting tendenziell langsamer macht.
+Auch ist die korrekte Wahl der Hyperparameter wichtig, da Gradient Boosting mit den falschen
+Parametern leicht overfitted.
+
+Wie die beiden Methoden mit fehlenden Werten (NAs) umgehen, hängt sehr von der konkreten
+Implementierung ab. Beispielsweise wirft rForestry´s multilayerForestry Funktion einen Fehler,
+wenn der Datensatz NAs enthält, manche Funktionen füllen fehlende Daten aber auch mit Mittelwerten auf.
 
 
-@R-base
 
 # References
