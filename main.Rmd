@@ -21,7 +21,7 @@ bibliography: [references.bib, packages.bib]
 ```{r setupMain, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-# R Version: 4.0.5
+# R Version: 4.2.1
 ```
 
 # Einleitung
