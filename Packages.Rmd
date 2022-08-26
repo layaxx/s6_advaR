@@ -100,7 +100,7 @@ benchmark <- function(createModel, times = 1) {
     duration = sums$duration / times
   )
 
-  knitr::kable(averages, col.names = c( "Mean", "Standard Deviation", "Duration"))
+  knitr::kable(averages, col.names = c("Mean", "Standard Deviation", "Duration"))
 }
 ```
 
@@ -168,7 +168,8 @@ benchmark(function(data) {
 p_install("ggplot2", force = FALSE)
 p_load(caret)
 ```
-Sehr vielseitige Bibliothek, die verschiedenste Modelle schätzen kann.
+Sehr vielseitige Bibliothek, die verschiedenste Modelle schätzen kann. Je nach gewünschtem
+Modell müssen gegebenenfalls zusätzliche Bibliotheken installiert werden.
 
 Standard Parameter:
 
@@ -179,25 +180,38 @@ Diese werden bei caret allerdings automatisch getuned. Genauere Kontrolle darüb
 Für genauere Kontrolle über die erlaubten Werte kann auch tuneGrid benutzt werden, hierfür werden allerdings die Namen der Parameter gebraucht, diese können wie folgt ausgegeben werden.
 
 Parameter für Random Forest:
-```{r modelInfo rf}
+```{r modelInforf}
 getModelInfo("rf")$rf$parameters
 ```
 
+Benchmark für Random Forest:
+```{r caret-benchmark-rf}
+p_load(randomForest)
+benchmark(function(data) {
+  caret::train(formula,
+    data = data,
+    method = "rf",
+    verbose = 0
+  )
+}, 3)
+```
+*Anmerkung:* Da das Trainieren eines Random Forest Modells mit caret ziemlich lange dauert, haben wir uns entschieden, den Benchmark für mit caret trainierte Modelle nur 3 statt 10 mal durchzuführen.
+
 Parameter für Gradient Boosting:
-```{r modelInfo gbm}
+```{r modelInfo-gbm}
 getModelInfo("gbm")$gbm$parameters
 ```
 
 
-Benchmark:
-```{r caret-benchmark}
+Benchmark für Gradient Boosting:
+```{r caret-benchmark-gb}
 benchmark(function(data) {
   caret::train(formula,
     data = data,
     method = "gbm",
     verbose = 0
   )
-}, 10)
+}, 3)
 ```
 
 ## Übersicht
