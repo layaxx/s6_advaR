@@ -164,22 +164,30 @@ benchmark(function(data) {
 ```
  
 ### caret
+```{r caret-setup, include=FALSE}
+p_install("ggplot2", force = FALSE)
+p_load(caret)
+```
 Sehr vielseitige Bibliothek, die verschiedenste Modelle schätzen kann: https://topepo.github.io/caret/available-models.html
 
 Standard Parameter:
 
 - NAs: schlägt fehl, wenn die Daten NAs enthalten, kann geändert werden
 
-Tuning Paremeter hängen von der Funktion die zum Schätzen verwendet werden soll ab.
+Tuning Parameter hängen von der Funktion die zum Schätzen verwendet werden soll ab.
+Diese werden bei caret allerdings automatisch getuned. Genauere Kontrolle darüber geben die Parameter trControl und tuneLength.
+Für genauere Kontrolle über die erlaubten Werte kann auch tuneGrid benutzt werden, hierfür werden allerdings die Namen der Parameter gebraucht, diese können wie folgt ausgegeben werden.
 
-Diese können allerdings automatisch getuned werden über die Parameter trControl und tuneLength.
-Für genauere Kontrolle über die erlaubten Werte kann auch tuneGrid benutzt werden, hierfür werden allerdings die Namen der Parameter gebraucht, diese können mit folgendem Code ausgegeben werden:
-```{r caret-setup}
-p_install("ggplot2", force = FALSE)
-p_load(caret)
+Parameters for Random Forest:
+```{r}
 getModelInfo("rf")$rf$parameters
+```
+
+Parameters for Gradient Boosting:
+```{r}
 getModelInfo("gbm")$gbm$parameters
 ```
+
 
 Benchmark:
 ```{r caret-benchmark}
@@ -197,4 +205,4 @@ package | Algorithmus
 --------|------------
 rForestry | Random Forest + Gradient Boosting
 gbm | Gradient Boosting
-caret | Random Forest, Gradient Boosting u.v.m
+caret | Random Forest, Gradient Boosting, u.v.m
