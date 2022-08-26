@@ -1,3 +1,7 @@
 .references>div::before {
     content: "•"
 }
+
+.references{
+  margin-bottom: 1rem;
+}

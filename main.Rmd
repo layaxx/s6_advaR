@@ -109,7 +109,7 @@ Random Forest ist bei der Wahl der Hyperparameter tendenziell weniger sensibel u
 
 Bei diesem Thema ist es allerdings schwer wissenschaftliche Studien zu finden, die sich generell mit diesen Verfahren auseinandersetzen. Die meisten Studien beschäftigen sich mit einem Anwendungsfall und verglichen nur welche Methode dort besser ist. Dies ist auch bei [@freeman2016random] der Fall, hier werden allerdings auch generellere Statements zu Random Forest und Gradient Boosting abgegeben. Auch [@olson2018data] bezieht sich auf ein bestimmtes Thema, geht dieses allerdings generalisiert an. Hierbei wird sich damit beschäftigt wie gut verschiedene Verfahren generell sind. Allerdings wird dabei nicht weiter darauf eingegangen welches Verfahren für welche Datensätze besser ist.
 
-Wir konnten nur eine Studie finden, die tatsächlich versuchte herauszufinden unter welche Methoden für welche Datensätze am besten funktionieren [@olson2017pmlb]. Diese Studie konnte ein paar interessante Zusammenhänge feststellen, zum Beispiel dass Gradient Boosting besser funktioniert, wenn es viele Interaktionen zwischen den Features gibt. Dennoch musste diese Studie auch eingestehen, dass die Meta-Features (Feature Typen, Klassenungleichgewicht, etc.) der benutzten Datensätze nicht sehr divers sind. Deswegen ist es nicht einfach viele generelle Statements aus diesen Daten zu nehmen.
+Wir konnten nur eine Studie finden, die versuchte herauszufinden, welche Methoden für welche Datensätze am besten funktionieren [@olson2017pmlb]. Diese Studie konnte ein paar interessante Zusammenhänge feststellen, zum Beispiel dass Gradient Boosting besser funktioniert, wenn es viele Interaktionen zwischen den Features gibt. Dennoch musste diese Studie auch eingestehen, dass die Meta-Features (Feature Typen, Klassenungleichgewicht, etc.) der benutzten Datensätze nicht sehr divers sind. Deswegen ist es nicht einfach, viele generelle Erkenntnisse aus diesen Daten zu gewinnen.
 
 Wie die beiden Methoden mit fehlenden Werten (NAs) umgehen, hängt sehr von der konkreten
 Implementierung ab. Beispielsweise wirft rForestry´s multilayerForestry Funktion einen Fehler, wenn der Datensatz NAs enthält, manche Funktionen füllen fehlende Daten aber auch mit Mittelwerten auf. 
@@ -120,4 +120,12 @@ knitr::write_bib(.packages(), "packages.bib")
 ```
 
 
-# References
+# Quellen
+<div id="refs"></div>
+
+
+
+# Anhang
+```{r}
+sessionInfo()
+```
