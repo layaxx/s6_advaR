@@ -65,7 +65,7 @@ run_single_benchmark <- function(create_model) {
 
   # calculates the model and times it
   start_time <- Sys.time()
-  model <- createModel(datasets$training)
+  model <- create_model(datasets$training)
   end_time <- Sys.time()
 
   # calculates predicted values from model
@@ -85,7 +85,7 @@ benchmark <- function(create_model, times = 1) {
   sums <- list(sd = 0, mean = 0, duration = 0)
   for (idx in 1:times) {
     # runs the actual benchmark `times` times
-    result <- run_single_benchmark(createModel)
+    result <- run_single_benchmark(create_model)
 
     # adds up the results
     sums$sd <- sums$sd + result$sd
