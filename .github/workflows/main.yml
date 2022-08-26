@@ -29,10 +29,12 @@ jobs:
           output_format: html_document
           
       - name: Rename document 
-        run: mv main.html index.html && rm !(index.html)
+        run: |
+          mkdir deploy
+          mv main.html deploay/index.html
           
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: '.'
+          folder: 'deploy'
         
