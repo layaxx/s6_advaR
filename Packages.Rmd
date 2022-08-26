@@ -60,7 +60,7 @@ get_y_values <- function(dataset) {
 }
 
 
-run_single_benchmark <- function(createModel) {
+run_single_benchmark <- function(create_model) {
   datasets <- split_into_training_and_test(data)
 
   # calculates the model and times it
@@ -81,7 +81,7 @@ run_single_benchmark <- function(createModel) {
 }
 
 
-benchmark <- function(createModel, times = 1) {
+benchmark <- function(create_model, times = 1) {
   sums <- list(sd = 0, mean = 0, duration = 0)
   for (idx in 1:times) {
     # runs the actual benchmark `times` times
@@ -100,7 +100,8 @@ benchmark <- function(createModel, times = 1) {
     duration = sums$duration / times
   )
 
-  knitr::kable(averages, col.names = c("Mean", "Standard Deviation", "Duration"))
+  display_names <- c("Mean", "Standard Deviation", "Duration")
+  knitr::kable(averages, col.names = display_names)
 }
 ```
 
