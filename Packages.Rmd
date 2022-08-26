@@ -94,13 +94,13 @@ benchmark <- function(createModel, times = 1) {
   }
 
   # calculates the average over every run and returns the result
-  averages <- list(
-    sd = sums$sd / times,
+  averages <- data.frame(
     mean = sums$mean / times,
+    sd = sums$sd / times,
     duration = sums$duration / times
   )
 
-  averages
+  knitr::kable(averages, col.names = c( "Mean", "Standard Deviation", "Duration"))
 }
 ```
 
