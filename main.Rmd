@@ -29,7 +29,7 @@ In der heutigen Welt ist es oft nötig eine automatische Klassifikation oder
 Schätzung von Daten durchzuführen. 
 Zwei mögliche Methoden dafür sind Random Forest sowie Gradient Boosting.
 Im Rahmen dieses Papers werden diese Methoden im Allgemeinen und spezielle 
-Implementierungen im Besonderen vorgestellt und verglichen. 
+Implementierungen im Besonderen vorgestellt. 
 
 # Einordnung
 Random Forest und Gradient Boosting sind grundlegend recht ähnliche Methoden.
@@ -37,9 +37,9 @@ Beide Verfahren sind supervised machine learning Verfahren, das heißt die Model
 anhand bekannter Ergebnisse trainiert.
 Auch das Einsatzgebiet, vorwiegend Klassifizierungs- oder Regressionsaufgaben, haben
 beide gemeinsam.
-
 Außerdem basieren beide auf dem Prinzip der collective Intelligence, bei dem 
-einfachere Methoden kombiniert werden, um bessere Ergenisse zu erzielen.
+einfachere Methoden kombiniert werden, um bessere Ergebnisse zu erzielen.
+
 Bei diesen einfacheren Methoden handelt es sich hier um Entscheidungsbäume.
 Ein Entscheidungsbaum wird beginnend beim Wurzelknoten durchlaufen, wobei an jedem Knoten 
 eine datenbasierte Entscheidung getroffen wird, die bestimmt, welcher Weg von 
@@ -47,6 +47,7 @@ hier aus genommen wird.
 Sobald ein Blatt des Baums erreicht wird, endet der Durchlauf. 
 Um einen Entscheidungsbaum zu trainieren, gibt es verschiedene Methoden, 
 diese werden hier allerdings nicht weiter beleuchtet. 
+
 Die Leistung eines einzelnen Entscheidungsbaums kann leicht durch verschiedene Fehler wie 
 Überanpassung, Verzerrungs- oder Varianzfehler verschlechtert werden. Um diese abzuschwächen, kombinieren Random Forest und Gradient Boosting mehrere Entscheidungbäume. 
 Dadurch können die beiden Methoden generell bessere Ergebnisse erzielen, was auch empirisch gezeigt wurde [@olson2018data]. Natürlich bedeutet dies aber nicht, dass Random Forest und Gradient Boosting immer besser sind [@olson2018data].
@@ -73,17 +74,17 @@ haben hier vor allem zwei Hyperparameter:
 - die Anzahl der Features pro Knoten
 
 ## Übersicht über Gradient Boosting
-Gradient Boosting nutzt die Entscheidungsbäume auf einer anderen Art. 
+Gradient Boosting nutzt die Entscheidungsbäume auf eine andere Art. 
 Wo beim Random Forest alle Bäume unabhängig voneinander waren, 
 bauen die Entscheidungsbäume hier aufeinander auf.
 
 Es wird zuerst ein einzelner Entscheidungsbaum auf dem gesamten Datensatz trainiert. 
 Wenn man das Datenset nun mit diesem Baum schätzt, kann man die Abweichung als die Differenz zwischen den
-tatsächlichen Werten und durch den Baum geschätzten Werten ausrechnen.
+tatsächlichen Werten und den geschätzten Werten ausrechnen.
 Auf diese Abweichung wird ein weiterer Entscheidungsbaum trainiert, 
 hierfür wird erneut der komplette Datensatz genommen, 
 nur dass das Zielergebnis nun die eben berechnete Abweichung ist. 
-Wenn jetzt die Ergebnisse beider Bäume addiert werden, bekommt man nun ein genaueres Ergebnis, 
+Wenn jetzt die Ergebnisse beider Bäume addiert werden, bekommt man ein genaueres Ergebnis, 
 verglichen mit einem einzigen Entscheidungsbaum. Dieser Prozess kann nun beliebig oft wiederholt werden.
 
 Auch hier gibt es prominente Hyperparameter, die Einfluss auf Qualität und Performanz haben:
@@ -107,9 +108,9 @@ Auch ist die korrekte Wahl der Hyperparameter wichtig, da Gradient Boosting sons
 
 Random Forest ist bei der Wahl der Hyperparameter tendenziell weniger sensibel und damit leichter zu benutzten [@freeman2016random]. Des weiteren overfitted ein Random Forest seltener als Gradient Boosting [@freeman2016random].
 
-Bei diesem Thema ist es allerdings schwer wissenschaftliche Studien zu finden, die sich generell mit diesen Verfahren auseinandersetzen. Die meisten Studien beschäftigen sich mit einem Anwendungsfall und verglichen nur welche Methode dort besser ist. Dies ist auch bei [@freeman2016random] der Fall, hier werden allerdings auch generellere Statements zu Random Forest und Gradient Boosting abgegeben. Auch [@olson2018data] bezieht sich auf ein bestimmtes Thema, geht dieses allerdings generalisiert an. Hierbei wird sich damit beschäftigt wie gut verschiedene Verfahren generell sind. Allerdings wird dabei nicht weiter darauf eingegangen welches Verfahren für welche Datensätze besser ist.
+Bei diesem Thema ist es allerdings schwer wissenschaftliche Studien zu finden, die sich generell mit diesen Verfahren auseinandersetzen. Die meisten Studien beschäftigen sich mit einem bestimmten Anwendungsfall und vergleichen nur, welche Methode dort besser ist. Dies ist auch bei [@freeman2016random] der Fall, hier werden allerdings zusätzlich generellere Statements zu Random Forest und Gradient Boosting abgegeben. Auch [@olson2018data] bezieht sich auf ein bestimmtes Thema, geht dieses allerdings generalisiert an. Hierbei beschäftigen sich die Autoren damit, wie gut verschiedene Verfahren generell sind. Allerdings wird dabei nicht weiter darauf eingegangen, welches Verfahren für welche Datensätze besser ist.
 
-Wir konnten nur eine Studie finden, die versuchte herauszufinden, welche Methoden für welche Datensätze am besten funktionieren [@olson2017pmlb]. Diese Studie konnte ein paar interessante Zusammenhänge feststellen, zum Beispiel dass Gradient Boosting besser funktioniert, wenn es viele Interaktionen zwischen den Features gibt. Dennoch musste diese Studie auch eingestehen, dass die Meta-Features (Feature Typen, Klassenungleichgewicht, etc.) der benutzten Datensätze nicht sehr divers sind. Deswegen ist es nicht einfach, viele generelle Erkenntnisse aus diesen Daten zu gewinnen.
+Wir konnten nur eine Studie finden, die versuchte herauszufinden, welche Methoden für welche Datensätze am besten funktionieren [@olson2017pmlb]. Diese Studie konnte interessante Zusammenhänge feststellen, zum Beispiel dass Gradient Boosting besser funktioniert, wenn es viele Interaktionen zwischen den Features gibt. Dennoch musste diese Studie auch eingestehen, dass die Meta-Features (Feature Typen, Klassenungleichgewicht, etc.) der benutzten Datensätze nicht sehr divers sind. Deswegen ist es nicht einfach, viele generelle Erkenntnisse aus diesen Daten zu gewinnen.
 
 Wie die beiden Methoden mit fehlenden Werten (NAs) umgehen, hängt sehr von der konkreten
 Implementierung ab. Beispielsweise wirft rForestry´s multilayerForestry Funktion einen Fehler, wenn der Datensatz NAs enthält, manche Funktionen füllen fehlende Daten aber auch mit Mittelwerten auf. 
