@@ -31,7 +31,7 @@ jobs:
       - name: Rename document 
         run: |
           mkdir deploy
-          mv main.html deploay/index.html
+          mv main.html deploy/index.html
           
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4
