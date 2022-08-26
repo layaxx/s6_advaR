@@ -192,6 +192,19 @@ benchmark(function(data) {
 }, 10)
 ```
 
+With automatic Tuning
+```{r caret-benchmark with autotuning}
+benchmark(function(data) {
+  caret::train(formula,
+    data = data,
+    method = "gbm",
+    verbose = 0,
+    trControl = trainControl(method = "repeatedCV", number = 5, repeats = 5),
+    tuneLength = 10
+  )
+}, 10)
+```
+
 ## Übersicht
 package | Algorithmus
 --------|------------
