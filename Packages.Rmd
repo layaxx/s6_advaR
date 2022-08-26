@@ -17,11 +17,13 @@ output:
 subtitle: 'verschiedene Random Forest / Gradient Boosting packages in R'
 ---
 
-```{r setup, include=FALSE, purl=FALSE}
+```{r setupPackages, include=FALSE, purl=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Dataset
+# Implementierung in R
+
+## Dataset
 ```{r}
 library(pacman)
 
@@ -32,7 +34,7 @@ column <- 14 # column of the data set that will be predicted
 formula <- formula(paste(names(data)[column], "~ ."))
 ```
 
-# Benchmark
+## Benchmark
 Die Benchmark function erwartet els Eingabe eine Funktion, die das Model generiert und eine optionale Zahl, die der Anzahl der Wiederholungen enspricht.
 
 Das Model wird `times` Male mit je unterschiedlichen Daten geschätzt und anhand der Testdaten auf Güte überprüft. Zurückgegeben werden durchschnittliche Standardabweichung, Differenz zwischen echten Werten des Testdatensatzes und den geschätzten Werten des Models und die durchschnittliche Laufzeit der Modelgenerierung.
@@ -98,8 +100,8 @@ benchmark <- function(createModel, times = 1) {
 ```
 
 
-# packages
-## Rforestry
+## packages
+### Rforestry
 Unterstützt sowohl Random Forests als auch Gradient Boosting
 
 ```{r}
@@ -132,7 +134,7 @@ benchmark(function(data) {
 }, 10)
 ```
 
-## gbm
+### gbm
 Gradient Boosting
 
 Tuning Parameter:
@@ -155,7 +157,7 @@ benchmark(function(data) {
 }, 10)
 ```
  
-## caret
+### caret
 Sehr vielseitige Bibliothek, die verschiedenste Modelle schätzen kann: https://topepo.github.io/caret/available-models.html
 
 Standard Parameter:
@@ -183,7 +185,7 @@ benchmark(function(data) {
 }, 10)
 ```
 
-# Übersicht
+## Übersicht
 package | Algorithmus
 --------|------------
 rForestry | Random Forest + Gradient Boosting

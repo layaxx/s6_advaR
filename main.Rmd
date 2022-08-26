@@ -16,7 +16,7 @@ output:
     keep_md: yes
 ---
 
-```{r setup, include=FALSE}
+```{r setupMain, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 # R Version: 4.0.5
@@ -92,7 +92,10 @@ Auch hier gibt es prominente Hyperparameter, die Einfluss auf Qualität und Perf
 - die Tiefe der Bäume
 - die Lernrate: soll ein Overfitting des Trainingdatensatzes vermeiden
 
-# Implementierung in R
+
+```{r child="Packages.Rmd"}
+
+```
 
 
 # Vor- und Nachteile
