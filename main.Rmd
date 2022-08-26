@@ -29,7 +29,6 @@ Schätzung von Daten durchzuführen.
 Zwei mögliche Methoden dafür sind Random Forest sowie Gradient Boosting.
 Im Rahmen dieses Papers werden diese Methoden im Allgemeinen und spezielle 
 Implementierungen im Besonderen vorgestellt und verglichen. 
-Der Fokus wird hierbei auf Vor- und Nachteilen der beiden Verfahren liegen.
 
 # Einordnung
 Random Forest und Gradient Boosting sind grundlegend recht ähnliche Methoden.
@@ -47,10 +46,9 @@ hier aus genommen wird.
 Sobald ein Blatt des Baums erreicht wird, endet der Durchlauf. 
 Um einen Entscheidungsbaum zu trainieren, gibt es verschiedene Methoden, 
 diese werden hier allerdings nicht weiter beleuchtet. 
-Die Leistung eines einzelnen Entscheidungsbaums kann leicht durch verschiedenen Fehlern wie 
-Überanpassung, Verzerrungs- oder Varianzfehler verschlechtert werden. 
-Um diese abzuschwächen, kombinieren Random Forest und 
-Gradient Boosting mehrere Entscheidungbäume. 
+Die Leistung eines einzelnen Entscheidungsbaums kann leicht durch verschiedene Fehler wie 
+Überanpassung, Verzerrungs- oder Varianzfehler verschlechtert werden. Um diese abzuschwächen, kombinieren Random Forest und Gradient Boosting mehrere Entscheidungbäume. 
+Dadurch können die beiden Methoden generell bessere Ergebnisse erzielen, was auch empirisch gezeigt wurde [@olson2018data]. Natürlich bedeutet dies aber nicht, dass Random Forest und Gradient Boosting immer besser sind [@olson2018data].
 
 Wie in den folgenden Kapiteln demonstriert werden wird, besteht 
 der größte Unterschied der Methoden im Training der Entscheidungsbäume. 
@@ -100,20 +98,21 @@ Auch hier gibt es prominente Hyperparameter, die Einfluss auf Qualität und Perf
 
 
 # Vor- und Nachteile
-Mit den richtigen Parametern performed Gradient boosting in der Regel besser [@Ravanshad].
+Mit den richtigen Parametern performed Gradient Boosting in der Regel besser [@olson2018data].
 Es gibt allerdings auch potentielle Nachteile: Weil die einzelnen Entscheidungsbäume beim
 Gradient Boosting anders als bei Random Forest nicht unabhängig voneinander sind, können 
 sie nicht parallel trainiert werden, was Gradient Boosting tendenziell langsamer macht.
-Auch ist die korrekte Wahl der Hyperparameter wichtig, da Gradient Boosting mit den falschen
-Parametern leicht overfitted.
+Auch ist die korrekte Wahl der Hyperparameter wichtig, da Gradient Boosting sonst leicht overfitted [@freeman2016random]. Dieses Problem kann vor allem auftreten, wenn die Daten starkes Rauschen beinhalten.
+
+Random Forest ist bei der Wahl der Hyperparameter tendenziell weniger sensibel und damit leichter zu benutzten [@freeman2016random]. Des weiteren overfitted ein Random Forest seltener als Gradient Boosting [@freeman2016random].
+
+Bei diesem Thema ist es allerdings schwer wissenschaftliche Studien zu finden, die sich generell mit diesen Verfahren auseinandersetzen. Die meisten Studien beschäftigen sich mit einem Anwendungsfall und verglichen nur welche Methode dort besser ist. Dies ist auch bei [@freeman2016random] der Fall, hier werden allerdings auch generellere Statements zu Random Forest und Gradient Boosting abgegeben. Auch [@olson2018data] bezieht sich auf ein bestimmtes Thema, geht dieses allerdings generalisiert an. Hierbei wird sich damit beschäftigt wie gut verschiedene Verfahren generell sind. Allerdings wird dabei nicht weiter darauf eingegangen welches Verfahren für welche Datensätze besser ist.
 
 Wie die beiden Methoden mit fehlenden Werten (NAs) umgehen, hängt sehr von der konkreten
-Implementierung ab. Beispielsweise wirft rForestry´s multilayerForestry Funktion einen Fehler,
-wenn der Datensatz NAs enthält, manche Funktionen füllen fehlende Daten aber auch mit Mittelwerten auf.
+Implementierung ab. Beispielsweise wirft rForestry´s multilayerForestry Funktion einen Fehler, wenn der Datensatz NAs enthält, manche Funktionen füllen fehlende Daten aber auch mit Mittelwerten auf. 
 
 
 ```{r writeReferences, include=FALSE}
-
 knitr::write_bib(.packages(), "packages.bib")
 ```
 
