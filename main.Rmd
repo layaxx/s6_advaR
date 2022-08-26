@@ -14,7 +14,7 @@ output:
     fig_width: 7
     fig_height: 7
     keep_md: yes
-bibliography: references.bib  
+bibliography: [references.bib, packages.bib]  
 ---
 
 ```{r setupMain, include=FALSE}
@@ -111,6 +111,11 @@ Wie die beiden Methoden mit fehlenden Werten (NAs) umgehen, hängt sehr von der 
 Implementierung ab. Beispielsweise wirft rForestry´s multilayerForestry Funktion einen Fehler,
 wenn der Datensatz NAs enthält, manche Funktionen füllen fehlende Daten aber auch mit Mittelwerten auf.
 
+
+```{r writeReferences, include=FALSE}
+
+knitr::write_bib(.packages(), "packages.bib")
+```
 
 
 # References
