@@ -19,14 +19,19 @@ subtitle: 'verschiedene Random Forest / Gradient Boosting packages in R'
 
 ```{r setupPackages, include=FALSE, purl=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+if (!require("pacman")) {
+  # install pacman if not already installed
+  options(repos = list(CRAN = "http://cran.rstudio.com/"))
+  install.packages("pacman")
+}
+library(pacman)
 ```
 
 # Implementierung in R
 
 ## Dataset
 ```{r dataset}
-library(pacman)
-
 set.seed(42)
 
 data <- MASS::Boston # data set to be used
