@@ -1,0 +1,3 @@
+.references>div::before {
+    content: "•"
+}

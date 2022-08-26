@@ -176,7 +176,7 @@ Standard Parameter:
 - NAs: schlägt fehl, wenn die Daten NAs enthalten, kann geändert werden
 
 Tuning Parameter hängen von der Funktion die zum Schätzen verwendet werden soll ab.
-Diese werden bei caret allerdings automatisch getuned. Genauere Kontrolle darüber geben die Parameter trControl und tuneLength.
+Diese werden bei caret allerdings automatisch getuned [@R-caret]. Genauere Kontrolle darüber geben die Parameter trControl und tuneLength.
 Für genauere Kontrolle über die erlaubten Werte kann auch tuneGrid benutzt werden, hierfür werden allerdings die Namen der Parameter gebraucht, diese können wie folgt ausgegeben werden.
 
 Parameter für Random Forest:

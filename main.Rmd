@@ -6,6 +6,7 @@ output:
   prettydoc::html_pretty:
     theme: cayman
     highlight: github
+    css: styles.css
     math: katex
     number_sections: yes
     toc: yes
