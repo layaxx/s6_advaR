@@ -1,6 +1,6 @@
 # Advanced Data Analysis With R
 
-## fertige Arbeit
+## Fertige Arbeit
 
 Um die fertige Arbeit anzusehen, einfach [main.html](./main.html) in einem Browser öffnen.
 

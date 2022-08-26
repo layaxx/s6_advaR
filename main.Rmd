@@ -1,6 +1,6 @@
 ---
 title: "Random Forest und Gradient Boosting in R"
-author: "Jonathan Loew, Yannick Lang"
+author: "Jonathan Löw, Yannick Lang"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   prettydoc::html_pretty:
@@ -49,11 +49,11 @@ Um einen Entscheidungsbaum zu trainieren, gibt es verschiedene Methoden,
 diese werden hier allerdings nicht weiter beleuchtet. 
 
 Die Leistung eines einzelnen Entscheidungsbaums kann leicht durch verschiedene Fehler wie 
-Überanpassung, Verzerrungs- oder Varianzfehler verschlechtert werden. Um diese abzuschwächen, kombinieren Random Forest und Gradient Boosting mehrere Entscheidungbäume. 
-Dadurch können die beiden Methoden generell bessere Ergebnisse erzielen, was auch empirisch gezeigt wurde [@olson2018data]. Natürlich bedeutet dies aber nicht, dass Random Forest und Gradient Boosting immer besser sind [@olson2018data].
+Überanpassung, Verzerrungs- oder Varianzfehler verschlechtert werden. Um diese Probleme abzuschwächen, kombinieren Random Forest und Gradient Boosting mehrere Entscheidungbäume. 
+Dadurch können die beiden Methoden generell bessere Ergebnisse erzielen, was auch empirisch gezeigt wurde [@olson2018data]. Natürlich bedeutet dies aber nicht, dass Random Forest und Gradient Boosting immer besser sind [@olson2018data], für bestimmte Datensätze können auch andere Methoden besser sein.
 
 Wie in den folgenden Kapiteln demonstriert werden wird, besteht 
-der größte Unterschied der Methoden im Training der Entscheidungsbäume. 
+der größte Unterschied der Methoden in der Komposition der Entscheidungsbäume. 
 
 ## Übersicht über Random Forest
 Ein Random Forest besteht grundlegend aus beliebig vielen unabhängigen Entscheidungsbäumen. 
@@ -63,12 +63,11 @@ Dadurch werden viele verschiedene Entscheidungsbäume erstellt, welche oftmals
 verschiedene Ergebnisse liefern. 
 Deswegen müssen die Ergebnisse der einzelnen Bäume zuletzt noch aggregiert werden. 
 Kein einzelner der trainierten Entscheidungsbäume ist besonders gut darin die Daten 
-zu klassifizieren oder zu schätzen, zusammengenommen steigt die Leistung
-der Bäume jedoch deutlich, insbesondere weil Ausreißer durch die Aggregation weniger
-Einfluss haben.
+zu klassifizieren oder zu schätzen. Zusammengenommen steigt die Leistung
+der Bäume jedoch deutlich, insbesondere weil Ausreißer durch die Aggregation weniger Einfluss haben.
 
-Einfluss auf die Qualität der Ergebnisse (aber natürlich auch die Performanz)
-haben hier vor allem zwei Hyperparameter:
+Die Qualität der Ergebnisse (aber natürlich auch die Performanz) wird 
+hauptsächlich durch zwei Hyperparameter bestimmt:
 
 - die Anzahl der geschätzten Bäume
 - die Anzahl der Features pro Knoten

@@ -25,28 +25,31 @@ if (!require("pacman")) {
   options(repos = list(CRAN = "http://cran.rstudio.com/"))
   install.packages("pacman")
 }
-library(pacman)
 ```
 
 # Implementierung in R
 
-## Dataset
+## Beispieldatensatz
+Unsere Beispieldaten bestehen aus dem "Housing Values in Suburbs of Boston" Datensatz, 
+als abhängige Werte wollen wir `medv`, den Median Wert der Häuser, schätzen.
 ```{r dataset}
 set.seed(42)
+library(pacman)
 
-data <- MASS::Boston # data set to be used
-column <- 14 # column of the data set that will be predicted
+data <- MASS::Boston # Beispieldatensatz
+column <- 14 # Spalte mit den abhängigen Werten
 formula <- formula(paste(names(data)[column], "~ ."))
+formula
 ```
 
 ## Benchmark
-Die Benchmark function erwartet els Eingabe eine Funktion, die das Model generiert und eine optionale Zahl, die der Anzahl der Wiederholungen enspricht.
+Die Benchmark-Funktion erwartet als Eingabe eine Funktion, die das Model generiert und eine optionale Zahl, die der Anzahl der Wiederholungen enspricht.
 
-Das Model wird `times` Male mit je unterschiedlichen Daten geschätzt und anhand der Testdaten auf Güte überprüft. Zurückgegeben werden durchschnittliche Standardabweichung, Differenz zwischen echten Werten des Testdatensatzes und den geschätzten Werten des Models und die durchschnittliche Laufzeit der Modelgenerierung.
-```{r benchmark}
-# auxiliary function which splits a dataset into training and test data
+Das Model wird `times` Male mit je unterschiedlichen Daten geschätzt und anhand der Testdaten auf Güte überprüft. Ausgegeben werden durchschnittliche Standardabweichung, Differenz zwischen echten Werten des Testdatensatzes und den geschätzten Werten des Models und die durchschnittliche Laufzeit der Modelgenerierung.
+```{r benchmark-utils}
+# Hilfsfuntion, die den Datensatz in Trainings- und Testdatensatz unterteilt
 split_into_training_and_test <- function(dataset) {
-  # 20% of data will be test data
+  # 20% der Daten sollen Testdaten sein
   test_ids <- sample(nrow(data), nrow(data) * 0.2)
 
   list(test = data[test_ids, ], training = data[-test_ids, ])
@@ -58,42 +61,45 @@ get_x_values <- function(dataset) {
 get_y_values <- function(dataset) {
   dataset[, column]
 }
+```
 
 
+```{r benchmark-single}
 run_single_benchmark <- function(create_model) {
   datasets <- split_into_training_and_test(data)
 
-  # calculates the model and times it
+  # Model trainieren und Zeit messen
   start_time <- Sys.time()
   model <- create_model(datasets$training)
   end_time <- Sys.time()
 
-  # calculates predicted values from model
+  # geschätzte Werte berechnen
   predicted_values <- predict(model, get_x_values(datasets$test))
   actual_values <- get_y_values(datasets$test)
 
-  # compares predicted with actual values and returns results
+  # geschätzte Werte mit echten Werten vergleichen
   list(
     sd = sd(actual_values - predicted_values),
-    mean = abs(mean(actual_values - predicted_values)),
+    mean = mean(abs(actual_values - predicted_values)),
     duration = end_time - start_time
   )
 }
+```
 
-
+```{r benchmark-multi}
 benchmark <- function(create_model, times = 1) {
   sums <- list(sd = 0, mean = 0, duration = 0)
   for (idx in 1:times) {
-    # runs the actual benchmark `times` times
+    # benchmark `times` Male ausführen
     result <- run_single_benchmark(create_model)
 
-    # adds up the results
+    # Ergebnisse aufaddieren
     sums$sd <- sums$sd + result$sd
     sums$mean <- sums$mean + result$mean
     sums$duration <- sums$duration + result$duration
   }
 
-  # calculates the average over every run and returns the result
+  # Durchschnitt der Ergebnisse bilden
   averages <- data.frame(
     mean = sums$mean / times,
     sd = sums$sd / times,
@@ -108,13 +114,13 @@ benchmark <- function(create_model, times = 1) {
 
 ## packages
 ### Rforestry
-Unterstützt sowohl Random Forests als auch Gradient Boosting
+Rforestry unterstützt sowohl Random Forests als auch Gradient Boosting.
 
 ```{r rforestry-setup}
 p_load(Rforestry)
 ```
 
-Random Forest: mithilfe der `forestry` Funktion:
+Ein Random Forest wird mithilfe der `forestry` Funktion erstellt.
 
 Tuning Parameter [@R-Rforestry]:
 
@@ -127,7 +133,7 @@ benchmark(function(data) {
 }, 10)
 ```
 
-Gradient Boosting: mithilfe der `multiLayerForestry` Funktion:
+Gradient Boosting kann mithilfe der `multiLayerForestry` Funktion umgesetzt werden.
 
 Tuning Parameter [@R-Rforestry]:
 
@@ -141,7 +147,7 @@ benchmark(function(data) {
 ```
 
 ### gbm
-Gradient Boosting
+Die `gbm` Bibliothek ist auf Gradient Boosting spezialisiert.
 
 Tuning Parameter [@R-gbm]:
 
@@ -165,20 +171,22 @@ benchmark(function(data) {
 ```
  
 ### caret
-```{r caret-setup, include=FALSE}
+```{r caret-setup-dependencies, include=FALSE}
 p_install("ggplot2", force = FALSE)
+```
+
+```{r caret-setup}
 p_load(caret)
 ```
-Sehr vielseitige Bibliothek, die verschiedenste Modelle schätzen kann. Je nach gewünschtem
+Caret ist eine sehr vielseitige Bibliothek, die verschiedenste Modelle schätzen kann. Je nach gewünschtem
 Modell müssen gegebenenfalls zusätzliche Bibliotheken installiert werden.
 
-Standard Parameter:
+Die Hyperparameter hängen von der Funktion ab, die zum Schätzen verwendet werden soll.
+Diese werden bei caret allerdings automatisch getuned [@R-caret]. 
+Kontrolle darüber geben die Parameter trControl und tuneLength.
+Für genauere Kontrolle über die erlaubten Werte kann auch tuneGrid benutzt werden, hierfür werden allerdings die Namen der Parameter gebraucht.
 
-- NAs: schlägt fehl, wenn die Daten NAs enthalten, kann geändert werden
-
-Tuning Parameter hängen von der Funktion die zum Schätzen verwendet werden soll ab.
-Diese werden bei caret allerdings automatisch getuned [@R-caret]. Genauere Kontrolle darüber geben die Parameter trControl und tuneLength.
-Für genauere Kontrolle über die erlaubten Werte kann auch tuneGrid benutzt werden, hierfür werden allerdings die Namen der Parameter gebraucht, diese können wie folgt ausgegeben werden.
+Diese können wie im Folgenden gezeigt ausgegeben werden:
 
 Parameter für Random Forest:
 ```{r modelInforf}
@@ -218,6 +226,6 @@ benchmark(function(data) {
 ## Übersicht
 package | Algorithmus
 --------|------------
-rForestry | Random Forest + Gradient Boosting
+rForestry | Random Forest, Gradient Boosting
 gbm | Gradient Boosting
 caret | Random Forest, Gradient Boosting, u.v.m
